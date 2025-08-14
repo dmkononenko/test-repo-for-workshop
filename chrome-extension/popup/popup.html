@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel Data Extractor</title>
+  <style>
+    body { 
+      width: 320px; 
+      padding: 16px; 
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 14px;
+      background-color: #f8f9fa;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 16px;
+      color: #212529;
+      font-weight: 600;
+    }
+    
+    .url-info { 
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #dee2e6;
+    }
+    
+    .url-info strong {
+      color: #495057;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .url-display {
+      margin-top: 8px;
+      padding: 8px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #6c757d;
+      word-break: break-all;
+      max-height: 60px;
+      overflow-y: auto;
+    }
+    
+    .create-btn { 
+      width: 100%; 
+      padding: 12px; 
+      background: #007bff; 
+      color: white; 
+      border: none; 
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .create-btn:hover {
+      background: #0056b3;
+    }
+    
+    .create-btn:active {
+      transform: translateY(1px);
+    }
+    
+    .status {
+      margin-top: 12px;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .status.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Data Extractor</h1>
+  </div>
+  
+  <div class="url-info">
+    <strong>Текущая страница:</strong>
+    <div class="url-display" id="current-url">Загрузка...</div>
+  </div>
+  
+  <button id="create-template" class="create-btn">
+    Создать шаблон
+  </button>
+  
+  <div id="status" class="status"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

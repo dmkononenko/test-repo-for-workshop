@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Generator</title>
+</head>
+<body>
+    <canvas id="canvas16" width="16" height="16"></canvas>
+    <canvas id="canvas48" width="48" height="48"></canvas>
+    <canvas id="canvas128" width="128" height="128"></canvas>
+
+    <script>
+        function createIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Фон
+            ctx.fillStyle = '#007bff';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Белая рамка
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = size / 16;
+            ctx.strokeRect(size / 8, size / 8, size * 6 / 8, size * 6 / 8);
+            
+            // Символ документа в центре
+            ctx.fillStyle = '#ffffff';
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const rectWidth = size / 3;
+            const rectHeight = size / 2.5;
+            
+            ctx.fillRect(centerX - rectWidth/2, centerY - rectHeight/2, rectWidth, rectHeight);
+            
+            // Линии как символ текста
+            ctx.fillStyle = '#007bff';
+            const lineHeight = size / 20;
+            const lineWidth = rectWidth * 0.6;
+            const startX = centerX - lineWidth/2;
+            
+            for (let i = 0; i < 3; i++) {
+                const y = centerY - rectHeight/4 + (i * lineHeight * 1.5);
+                ctx.fillRect(startX, y, lineWidth, lineHeight);
+            }
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        // Создаем иконки
+        const icon16 = createIcon('canvas16', 16);
+        const icon48 = createIcon('canvas48', 48);
+        const icon128 = createIcon('canvas128', 128);
+
+        // Выводим для копирования
+        console.log('Icons generated. Use browser dev tools to save these as PNG files.');
+    </script>
+</body>
+</html>
