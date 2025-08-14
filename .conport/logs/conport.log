@@ -1,0 +1,6 @@
+2025-08-14 20:01:22,747 - INFO - context_portal_mcp.main - File logging configured to: /Users/dkononenko/WebstormProjects/JIRA-PowerUP/test-repo-for-workshop/.conport/logs/conport.log
+2025-08-14 20:01:22,747 - INFO - context_portal_mcp.main - Parsed CLI args: Namespace(host='127.0.0.1', port=8000, workspace_id='/Users/dkononenko/WebstormProjects/JIRA-combiner', mode='stdio', log_file='/Users/dkononenko/WebstormProjects/JIRA-PowerUP/test-repo-for-workshop/.conport/logs/conport.log', log_level='INFO')
+2025-08-14 20:01:22,747 - INFO - context_portal_mcp.main - Starting ConPort in STDIO mode using FastMCP for initial CLI arg workspace_id: /Users/dkononenko/WebstormProjects/JIRA-combiner
+2025-08-14 20:01:22,747 - INFO - context_portal_mcp.main - Pre-warming database connection for workspace: /Users/dkononenko/WebstormProjects/JIRA-combiner
+2025-08-14 20:01:22,749 - INFO - context_portal_mcp.db.database - Alembic: Script directory /Users/dkononenko/WebstormProjects/JIRA-combiner/context_portal/alembic confirmed to exist by Python.
+2025-08-14 20:01:22,749 - INFO - context_portal_mcp.db.database - Running Alembic migrations for database: /Users/dkononenko/WebstormProjects/JIRA-combiner/context_portal/context.db
