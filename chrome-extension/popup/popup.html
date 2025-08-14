@@ -6,8 +6,8 @@
   <title>Admin Panel Data Extractor</title>
   <style>
     body { 
-      width: 320px; 
-      padding: 16px; 
+      width: 350px; 
+      padding: 0;
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 14px;
@@ -15,17 +15,20 @@
     }
     
     .header {
+      background: #007bff;
+      color: white;
+      padding: 16px;
       text-align: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #dee2e6;
     }
     
     .header h1 {
       margin: 0;
       font-size: 16px;
-      color: #212529;
       font-weight: 600;
+    }
+    
+    .content {
+      padding: 16px;
     }
     
     .url-info { 
@@ -54,25 +57,123 @@
       max-height: 60px;
       overflow-y: auto;
     }
+
+    .templates-section {
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .templates-list {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .template-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f1f3f4;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .template-item:last-child {
+      border-bottom: none;
+    }
+
+    .template-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .template-item.recommended {
+      background: linear-gradient(90deg, #e3f2fd 0%, #ffffff 100%);
+      border-left: 3px solid #2196f3;
+    }
+
+    .template-name {
+      font-weight: 500;
+      color: #212529;
+      font-size: 13px;
+    }
+
+    .template-fields-count {
+      font-size: 11px;
+      color: #6c757d;
+      margin-top: 2px;
+    }
+
+    .template-apply-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .template-apply-btn:hover {
+      background: #218838;
+    }
+
+    .no-templates {
+      padding: 20px;
+      text-align: center;
+      color: #6c757d;
+      font-size: 13px;
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
     
-    .create-btn { 
-      width: 100%; 
+    .btn { 
       padding: 12px; 
-      background: #007bff; 
-      color: white; 
       border: none; 
       border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
-      transition: background-color 0.2s;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #007bff; 
+      color: white; 
     }
     
-    .create-btn:hover {
+    .btn-primary:hover {
       background: #0056b3;
     }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #545b62;
+    }
     
-    .create-btn:active {
+    .btn:active {
       transform: translateY(1px);
     }
     
@@ -101,6 +202,16 @@
       opacity: 0.6;
       pointer-events: none;
     }
+
+    .stats {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      font-size: 12px;
+      color: #6c757d;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -108,17 +219,38 @@
     <h1>Data Extractor</h1>
   </div>
   
-  <div class="url-info">
-    <strong>Текущая страница:</strong>
-    <div class="url-display" id="current-url">Загрузка...</div>
+  <div class="content">
+    <div class="url-info">
+      <strong>Текущая страница:</strong>
+      <div class="url-display" id="current-url">Загрузка...</div>
+    </div>
+
+    <div class="templates-section" id="templates-section">
+      <div class="section-title">Доступные шаблоны</div>
+      <div id="templates-container">
+        <!-- Шаблоны будут загружены динамически -->
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="create-template" class="btn btn-primary">
+        + Создать шаблон
+      </button>
+      
+      <button id="open-settings" class="btn btn-secondary">
+        ⚙️ Настройки
+      </button>
+    </div>
+
+    <div class="stats" id="stats">
+      Загрузка статистики...
+    </div>
+    
+    <div id="status" class="status"></div>
   </div>
   
-  <button id="create-template" class="create-btn">
-    Создать шаблон
-  </button>
-  
-  <div id="status" class="status"></div>
-  
+  <script src="../shared/storage.js"></script>
+  <script src="../shared/template-manager.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

@@ -1,176 +1,212 @@
-// Popup Script для Chrome расширения Admin Panel Data Extractor
-// Используем ES5 синтаксис для максимальной совместимости
+/**
+ * JavaScript для popup интерфейса Data Extractor
+ * Использует ES5 синтаксис для максимальной совместимости
+ */
 
 (function() {
   'use strict';
   
-  console.log('Popup script загружен');
-  
-  var currentTab = null;
+  var templateManager = new TemplateManager();
+  var currentUrl = '';
+  var availableTemplates = [];
+
+  // DOM элементы
   var elements = {
-    urlDisplay: null,
-    createButton: null,
-    status: null
+    currentUrl: document.getElementById('current-url'),
+    templatesContainer: document.getElementById('templates-container'),
+    createTemplate: document.getElementById('create-template'),
+    openSettings: document.getElementById('open-settings'),
+    stats: document.getElementById('stats'),
+    status: document.getElementById('status')
   };
-  
-  // Инициализация при загрузке DOM
+
+  // Инициализация при загрузке
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Popup DOM загружен');
-    
-    // Получаем ссылки на элементы
-    elements.urlDisplay = document.getElementById('current-url');
-    elements.createButton = document.getElementById('create-template');
-    elements.status = document.getElementById('status');
-    
-    // Проверяем, что все элементы найдены
-    if (!elements.urlDisplay || !elements.createButton || !elements.status) {
-      console.error('Не удалось найти все необходимые элементы popup');
-      showStatus('Ошибка инициализации интерфейса', 'error');
-      return;
-    }
-    
-    // Загружаем информацию о текущей вкладке
-    loadCurrentTabInfo();
-    
-    // Настраиваем обработчики событий
-    setupEventHandlers();
-    
-    console.log('Popup инициализирован успешно');
+    initializePopup();
+    loadCurrentUrl();
+    loadTemplatesForCurrentPage();
+    loadStats();
+    initializeEventListeners();
   });
-  
-  // Загрузка информации о текущей вкладке
-  function loadCurrentTabInfo() {
-    console.log('Загрузка информации о текущей вкладке...');
-    
+
+  function initializePopup() {
+    console.log('Popup initialized');
+  }
+
+  function initializeEventListeners() {
+    // Кнопка создания шаблона
+    elements.createTemplate.addEventListener('click', function() {
+      openSettingsPage();
+    });
+
+    // Кнопка настроек
+    elements.openSettings.addEventListener('click', function() {
+      openSettingsPage();
+    });
+  }
+
+  function loadCurrentUrl() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      if (chrome.runtime.lastError) {
-        console.error('Ошибка получения информации о вкладке:', chrome.runtime.lastError);
-        elements.urlDisplay.textContent = 'Ошибка загрузки URL';
-        showStatus('Не удалось получить информацию о странице', 'error');
-        return;
-      }
-      
       if (tabs && tabs.length > 0) {
-        currentTab = tabs[0];
-        var displayUrl = currentTab.url;
-        
-        // Обрезаем очень длинные URL для лучшего отображения
-        if (displayUrl.length > 100) {
-          displayUrl = displayUrl.substring(0, 97) + '...';
-        }
-        
-        elements.urlDisplay.textContent = displayUrl;
-        console.log('✓ URL загружен:', currentTab.url);
-        
-        // Проверяем, поддерживается ли страница (не chrome://, не file:// и т.д.)
-        validateCurrentPage();
+        currentUrl = tabs[0].url;
+        elements.currentUrl.textContent = currentUrl;
       } else {
-        console.error('Не найдено активных вкладок');
-        elements.urlDisplay.textContent = 'Нет активной вкладки';
-        showStatus('Не найдено активной вкладки', 'error');
+        elements.currentUrl.textContent = 'Не удалось получить URL';
       }
     });
   }
-  
-  // Проверка, поддерживается ли текущая страница
-  function validateCurrentPage() {
-    if (!currentTab || !currentTab.url) {
-      return false;
-    }
-    
-    var url = currentTab.url;
-    var unsupportedProtocols = ['chrome://', 'chrome-extension://', 'moz-extension://', 'file://'];
-    
-    for (var i = 0; i < unsupportedProtocols.length; i++) {
-      if (url.indexOf(unsupportedProtocols[i]) === 0) {
-        console.log('Страница не поддерживается:', url);
-        elements.createButton.disabled = true;
-        elements.createButton.textContent = 'Страница не поддерживается';
-        showStatus('Расширение не работает на служебных страницах', 'error');
-        return false;
-      }
-    }
-    
-    return true;
-  }
-  
-  // Настройка обработчиков событий
-  function setupEventHandlers() {
-    elements.createButton.addEventListener('click', handleCreateTemplate);
-    
-    // Тест коммуникации с background script при инициализации
-    testCommunication();
-  }
-  
-  // Обработчик кнопки создания шаблона
-  function handleCreateTemplate() {
-    console.log('Кнопка создания шаблона нажата');
-    
-    if (!currentTab) {
-      showStatus('Нет информации о текущей странице', 'error');
-      return;
-    }
-    
-    // Блокируем кнопку во время выполнения
-    setLoadingState(true);
-    
-    // В рамках этапа 1 просто показываем информацию
+
+  function loadTemplatesForCurrentPage() {
+    // Ждем получения URL
     setTimeout(function() {
-      var message = 'Этап 1: Базовая настройка завершена!\n\n' +
-                   'Функция создания шаблона будет реализована в следующих этапах.\n\n' +
-                   'Текущая страница: ' + currentTab.url + '\n' +
-                   'Заголовок: ' + (currentTab.title || 'Не определен');
-      
-      alert(message);
-      
-      setLoadingState(false);
-      showStatus('Готов к разработке следующего этапа', 'success');
-      
-      console.log('✓ Демонстрация этапа 1 завершена');
+      if (!currentUrl) {
+        renderNoTemplates('URL не загружен');
+        return;
+      }
+
+      templateManager.getTemplatesForUrl(currentUrl, function(err, templates) {
+        if (err) {
+          console.error('Error loading templates:', err);
+          renderNoTemplates('Ошибка загрузки шаблонов');
+          return;
+        }
+
+        availableTemplates = templates;
+        renderTemplates(templates);
+      });
     }, 500);
   }
-  
-  // Управление состоянием загрузки
-  function setLoadingState(loading) {
-    if (loading) {
-      elements.createButton.disabled = true;
-      elements.createButton.textContent = 'Обработка...';
-      document.body.classList.add('loading');
-    } else {
-      elements.createButton.disabled = false;
-      elements.createButton.textContent = 'Создать шаблон';
-      document.body.classList.remove('loading');
+
+  function renderTemplates(templates) {
+    if (!templates || templates.length === 0) {
+      renderNoTemplates('Нет подходящих шаблонов для этой страницы');
+      return;
     }
-  }
-  
-  // Отображение статуса
-  function showStatus(message, type) {
-    elements.status.textContent = message;
-    elements.status.className = 'status ' + (type || 'success');
-    elements.status.style.display = 'block';
+
+    var templatesHtml = '<div class="templates-list">';
     
-    // Автоматически скрываем статус через 5 секунд
-    setTimeout(function() {
-      elements.status.style.display = 'none';
-    }, 5000);
-  }
-  
-  // Тест коммуникации с background script
-  function testCommunication() {
-    chrome.runtime.sendMessage({action: 'test'}, function(response) {
-      if (chrome.runtime.lastError) {
-        console.error('Ошибка коммуникации с background script:', chrome.runtime.lastError);
-        return;
-      }
+    templates.forEach(function(template, index) {
+      var isRecommended = template.url !== '*' && templateManager.matchesUrl(template, currentUrl);
+      var fieldsCount = template.fields ? template.fields.length : 0;
       
-      if (response && response.status === 'communication ok') {
-        console.log('✓ Коммуникация с background script работает');
-        console.log('Timestamp от background:', response.timestamp);
-      } else {
-        console.log('✗ Неожиданный ответ от background script:', response);
-      }
+      templatesHtml += [
+        '<div class="template-item' + (isRecommended ? ' recommended' : '') + '" data-template-id="' + template.id + '">',
+          '<div class="template-info">',
+            '<div class="template-name">' + escapeHtml(template.name) + '</div>',
+            '<div class="template-fields-count">' + fieldsCount + ' полей</div>',
+          '</div>',
+          '<button class="template-apply-btn" data-template-id="' + template.id + '">',
+            'Применить',
+          '</button>',
+        '</div>'
+      ].join('');
+    });
+
+    templatesHtml += '</div>';
+    elements.templatesContainer.innerHTML = templatesHtml;
+
+    // Добавляем обработчики событий
+    var applyButtons = elements.templatesContainer.querySelectorAll('.template-apply-btn');
+    applyButtons.forEach(function(button) {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var templateId = this.getAttribute('data-template-id');
+        applyTemplate(templateId);
+      });
+    });
+
+    // Клик по всему элементу шаблона тоже применяет его
+    var templateItems = elements.templatesContainer.querySelectorAll('.template-item');
+    templateItems.forEach(function(item) {
+      item.addEventListener('click', function() {
+        var templateId = this.getAttribute('data-template-id');
+        applyTemplate(templateId);
+      });
     });
   }
-  
-  console.log('Popup script инициализирован');
+
+  function renderNoTemplates(message) {
+    elements.templatesContainer.innerHTML = '<div class="no-templates">' + message + '</div>';
+  }
+
+  function applyTemplate(templateId) {
+    var template = availableTemplates.find(function(t) { return t.id === templateId; });
+    if (!template) {
+      showStatus('Шаблон не найден', 'error');
+      return;
+    }
+
+    showStatus('Применяется шаблон "' + template.name + '"...', 'loading');
+
+    // Отправляем сообщение в content script для извлечения данных
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      if (!tabs || tabs.length === 0) {
+        showStatus('Не удалось получить активную вкладку', 'error');
+        return;
+      }
+
+      chrome.tabs.sendMessage(tabs[0].id, {
+        action: 'extractData',
+        template: template
+      }, function(response) {
+        if (chrome.runtime.lastError) {
+          showStatus('Ошибка связи со страницей', 'error');
+          return;
+        }
+
+        if (response && response.success) {
+          showStatus('Данные скопированы (' + response.fieldsCount + ' полей)', 'success');
+          
+          // Автоматически закрываем popup через 2 секунды
+          setTimeout(function() {
+            window.close();
+          }, 2000);
+        } else {
+          var errorMsg = response && response.error ? response.error : 'Неизвестная ошибка';
+          showStatus('Ошибка: ' + errorMsg, 'error');
+        }
+      });
+    });
+  }
+
+  function loadStats() {
+    templateManager.getTemplateStats(function(err, stats) {
+      if (err) {
+        elements.stats.textContent = 'Ошибка загрузки статистики';
+        return;
+      }
+
+      var statsText = 'Всего шаблонов: ' + stats.totalTemplates;
+      if (stats.totalTemplates > 0) {
+        statsText += ' | Полей: ' + stats.totalFields;
+      }
+      
+      elements.stats.textContent = statsText;
+    });
+  }
+
+  function openSettingsPage() {
+    chrome.runtime.openOptionsPage(function() {
+      window.close();
+    });
+  }
+
+  function showStatus(message, type) {
+    elements.status.textContent = message;
+    elements.status.className = 'status ' + (type || '');
+    elements.status.style.display = 'block';
+
+    if (type !== 'loading') {
+      setTimeout(function() {
+        elements.status.style.display = 'none';
+      }, 3000);
+    }
+  }
+
+  function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
 })();

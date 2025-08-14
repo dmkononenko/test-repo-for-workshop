@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестовая страница - Карточка пользователя</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        select {
+            cursor: pointer;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .info-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .test-values {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+        
+        .test-values h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        
+        .test-values ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .test-values li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Профиль пользователя</h1>
+        
+        <form>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">Имя</label>
+                    <input type="text" id="firstName" name="firstName" value="Иван">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Фамилия</label>
+                    <input type="text" id="lastName" name="lastName" value="Петров">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="ivan.petrov@example.com">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" id="phone" name="phone" value="+7 (999) 123-45-67">
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Статус</label>
+                    <select id="status" name="status">
+                        <option value="active" selected>Активен</option>
+                        <option value="inactive">Неактивен</option>
+                        <option value="pending">Ожидает подтверждения</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="role">Роль</label>
+                    <select id="role" name="role">
+                        <option value="user" selected>Пользователь</option>
+                        <option value="admin">Администратор</option>
+                        <option value="moderator">Модератор</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="department">Отдел</label>
+                    <input type="text" id="department" name="department" value="Отдел разработки">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="position">Должность</label>
+                <input type="text" id="position" name="position" value="Ведущий разработчик">
+            </div>
+            
+            <div class="form-group">
+                <label for="registrationDate">Дата регистрации</label>
+                <input type="date" id="registrationDate" name="registrationDate" value="2023-01-15">
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">Примечания</label>
+                <textarea id="notes" name="notes" placeholder="Дополнительная информация...">Опытный разработчик с экспертизой в веб-технологиях. Работает в команде более 3 лет.</textarea>
+            </div>
+        </form>
+        
+        <div class="info-section">
+            <h3>📋 Тестовая страница для Data Extractor</h3>
+            <p>Эта страница создана для тестирования Chrome расширения Data Extractor. Используйте её для создания шаблонов и проверки функций извлечения данных.</p>
+            
+            <div class="test-values">
+                <h3>Примерные селекторы для тестирования:</h3>
+                <ul>
+                    <li><strong>Имя:</strong> #firstName или input[name="firstName"]</li>
+                    <li><strong>Email:</strong> #email или input[name="email"]</li>
+                    <li><strong>Телефон:</strong> #phone или input[name="phone"]</li>
+                    <li><strong>Статус:</strong> #status или select[name="status"]</li>
+                    <li><strong>Роль:</strong> #role или select[name="role"]</li>
+                    <li><strong>Отдел:</strong> #department или input[name="department"]</li>
+                    <li><strong>Должность:</strong> #position или input[name="position"]</li>
+                    <li><strong>Примечания:</strong> #notes или textarea[name="notes"]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Добавляем интерактивности для демонстрации
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Тестовая страница загружена');
+            console.log('Страница готова для работы с Data Extractor');
+            
+            // Случайно изменяем некоторые значения каждые 10 секунд для демонстрации
+            var names = ['Иван', 'Петр', 'Александр', 'Дмитрий', 'Сергей'];
+            var lastNames = ['Петров', 'Иванов', 'Сидоров', 'Козлов', 'Смирнов'];
+            var positions = ['Разработчик', 'Аналитик', 'Тестировщик', 'Менеджер', 'Дизайнер'];
+            
+            setInterval(function() {
+                var firstName = document.getElementById('firstName');
+                var lastName = document.getElementById('lastName');
+                var position = document.getElementById('position');
+                
+                if (firstName) firstName.value = names[Math.floor(Math.random() * names.length)];
+                if (lastName) lastName.value = lastNames[Math.floor(Math.random() * lastNames.length)];
+                if (position) position.value = positions[Math.floor(Math.random() * positions.length)];
+                
+                console.log('Данные обновлены для демонстрации динамического контента');
+            }, 30000); // Каждые 30 секунд
+        });
+    </script>
+</body>
+</html>

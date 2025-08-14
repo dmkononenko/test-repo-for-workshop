@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки - Data Extractor</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>
+                <img src="../icons/icon48.png" alt="Icon" class="header-icon">
+                Настройки Data Extractor
+            </h1>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="templates">Шаблоны</button>
+            <button class="tab-button" data-tab="settings">Настройки</button>
+            <button class="tab-button" data-tab="import-export">Импорт/Экспорт</button>
+            <button class="tab-button" data-tab="about">О программе</button>
+        </nav>
+
+        <!-- Вкладка Шаблоны -->
+        <div class="tab-content active" id="templates">
+            <div class="toolbar">
+                <button id="create-template" class="btn btn-primary">
+                    <span class="icon">+</span>
+                    Создать шаблон
+                </button>
+                <div class="search-box">
+                    <input type="text" id="template-search" placeholder="Поиск шаблонов...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="template-stats">
+                    <span id="templates-count">0 шаблонов</span>
+                </div>
+            </div>
+
+            <div class="templates-list" id="templates-list">
+                <!-- Шаблоны будут добавлены динамически -->
+            </div>
+
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <div class="empty-icon">📋</div>
+                <h3>Шаблоны не найдены</h3>
+                <p>Создайте первый шаблон для автоматизации копирования данных</p>
+                <button class="btn btn-primary" onclick="document.getElementById('create-template').click()">
+                    Создать шаблон
+                </button>
+            </div>
+        </div>
+
+        <!-- Вкладка Настройки -->
+        <div class="tab-content" id="settings">
+            <div class="settings-section">
+                <h3>Общие настройки</h3>
+                
+                <div class="setting-item">
+                    <label for="auto-copy">
+                        <input type="checkbox" id="auto-copy" checked>
+                        Автоматически копировать данные в буфер обмена
+                    </label>
+                    <p class="setting-description">
+                        Копировать извлеченные данные в буфер обмена без дополнительного подтверждения
+                    </p>
+                </div>
+
+                <div class="setting-item">
+                    <label for="show-notifications">
+                        <input type="checkbox" id="show-notifications" checked>
+                        Показывать уведомления
+                    </label>
+                    <p class="setting-description">
+                        Отображать уведомления о результатах операций
+                    </p>
+                </div>
+
+                <div class="setting-item">
+                    <label for="highlight-fields">
+                        <input type="checkbox" id="highlight-fields">
+                        Подсвечивать поля на странице
+                    </label>
+                    <p class="setting-description">
+                        Визуально выделять поля, которые будут извлечены активным шаблоном
+                    </p>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Хранилище</h3>
+                <div class="storage-info" id="storage-info">
+                    <div class="storage-stat">
+                        <span class="label">Использовано:</span>
+                        <span class="value" id="storage-used">Загрузка...</span>
+                    </div>
+                    <div class="storage-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="storage-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Импорт/Экспорт -->
+        <div class="tab-content" id="import-export">
+            <div class="import-export-section">
+                <h3>Экспорт данных</h3>
+                <p>Сохраните все шаблоны в JSON файл для резервного копирования или переноса на другое устройство.</p>
+                <button id="export-templates" class="btn btn-secondary">
+                    <span class="icon">📤</span>
+                    Экспортировать шаблоны
+                </button>
+            </div>
+
+            <div class="import-export-section">
+                <h3>Импорт данных</h3>
+                <p>Восстановите шаблоны из ранее сохраненного JSON файла.</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <button id="import-templates" class="btn btn-secondary">
+                        <span class="icon">📥</span>
+                        Импортировать шаблоны
+                    </button>
+                </div>
+                <div class="import-result" id="import-result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Вкладка О программе -->
+        <div class="tab-content" id="about">
+            <div class="about-section">
+                <h3>Data Extractor v1.0.0</h3>
+                <p>Chrome расширение для автоматизации копирования данных из веб-форм в админ-панелях с помощью настраиваемых шаблонов.</p>
+                
+                <h4>Возможности:</h4>
+                <ul>
+                    <li>Создание шаблонов для извлечения данных</li>
+                    <li>Интерактивный выбор элементов на странице</li>
+                    <li>Автоматическое копирование в буфер обмена</li>
+                    <li>Контекстное меню для быстрого доступа</li>
+                    <li>Импорт и экспорт настроек</li>
+                </ul>
+
+                <h4>Горячие клавиши:</h4>
+                <ul>
+                    <li><kbd>Ctrl+Shift+E</kbd> - Применить активный шаблон</li>
+                    <li><kbd>Ctrl+Shift+T</kbd> - Создать новый шаблон</li>
+                </ul>
+
+                <div class="links">
+                    <a href="#" id="open-help">Справка</a>
+                    <a href="#" id="report-issue">Сообщить об ошибке</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания/редактирования шаблона -->
+    <div class="modal" id="template-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Создать шаблон</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="template-form">
+                    <div class="form-group">
+                        <label for="template-name">Название шаблона *</label>
+                        <input type="text" id="template-name" required placeholder="Например: Карточка пользователя">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template-url">URL паттерн</label>
+                        <input type="text" id="template-url" placeholder="https://admin.example.com/* или * для всех страниц">
+                        <small>Используйте * для замены любых символов</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Поля для извлечения</label>
+                        <div class="fields-list" id="template-fields">
+                            <!-- Поля будут добавлены динамически -->
+                        </div>
+                        <button type="button" id="add-field" class="btn btn-link">
+                            <span class="icon">+</span>
+                            Добавить поле
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modal-cancel">Отмена</button>
+                <button type="button" class="btn btn-primary" id="modal-save">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <script src="../shared/storage.js"></script>
+    <script src="../shared/template-manager.js"></script>
+    <script src="options.js"></script>
+</body>
+</html>

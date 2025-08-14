@@ -30,6 +30,8 @@
     "js": ["content/content-script.js"]
   }],
 
+  "options_page": "options/options.html",
+
   "host_permissions": [
     "<all_urls>"
   ]
